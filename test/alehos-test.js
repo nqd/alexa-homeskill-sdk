@@ -16,7 +16,7 @@ describe('Alehos', () => {
     const context = {};
 
     let cbSpy = sinon.spy();
-    app.handler(event, context, cbSpy);
+    app.handle(event, context, cbSpy);
     let matched = sinon.match(obj => {
       return obj.header.name === 'UnsupportedOperationError';
     });
@@ -27,11 +27,15 @@ describe('Alehos', () => {
     // given
     const event = events.reqHealthCheck;
     const context = {};
-    app.healthCheck = sinon.spy();
+    let healthCheck = sinon.spy();
+    app.registerHandler('healthCheck', healthCheck);
     // when
-    app.handler(event, context, (_err, _payload) => {});
+    app.handle(event, context, (_err, _payload) => {});
     // then
-    sinon.assert.calledWith(app.healthCheck, sinon.match.has('event', event));
+    sinon.assert.calledWith(
+      healthCheck,
+      sinon.match.has('event', event).and(sinon.match.has('context', context))
+    );
   });
 
   it('should return the right payload from equivalent fnc', () => {
@@ -42,13 +46,13 @@ describe('Alehos', () => {
       description: 'The system is currently healthy',
       isHealthy: true
     };
-    // app.healthCheck = sinon.stub().yields(healthCheckRes);
-    app.healthCheck = (req, cb) => {
+    let healthCheck = (req, cb) => {
       return cb(null, healthCheckRes);
     };
+    app.registerHandler('healthCheck', healthCheck);
     // when
     let resSpy = sinon.spy();
-    app.handler(event, context, resSpy);
+    app.handle(event, context, resSpy);
     // then
     let matched = obj => {
       return obj.header.name === 'HealthCheckResponse' &&
@@ -64,14 +68,15 @@ describe('Alehos', () => {
     // given
     const event = events.reqDiscovery;
     const context = {};
-    app.discover = (req, cb) => {
+    let discover = (req, cb) => {
       let err = new Error();
       err.code = app.code.ERROR_TARGET_OFFLINE;
       return cb(err);
     };
+    app.registerHandler('discover', discover);
     // when
     let resSpy = sinon.spy();
-    app.handler(event, context, resSpy);
+    app.handle(event, context, resSpy);
     // then
     let matched = obj => {
       return obj.header.name === 'TargetOfflineError' &&
