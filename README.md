@@ -11,55 +11,25 @@ Note: this is the WIP, API may change.
 # How to use
 
 ```
-var alehos = require('alehos);
+var Alehos = require('alehos);
 
-var app = new alehos();
+var alehos = new Alehos();
 
-app.discover = function(req, cb) {
-  let payload = {
-    "discoveredAppliances": [{
-      "actions": [
-        "incrementTargetTemperature",
-        "decrementTargetTemperature",
-        "setTargetTemperature"
-      ],
-      "additionalApplianceDetails": {},
-      "applianceId": "uniqueThermostatDeviceId",
-      "friendlyDescription": "descriptionThatIsShownToCustomer",
-      "friendlyName": " Bedroom Thermostat",
-      "isReachable": true,
-      "manufacturerName": "yourManufacturerName",
-      "modelName": "fancyThermostat",
-      "version": "your software version number here."
-    }, {
-      "actions": [
-        "incrementPercentage",
-        "decrementPercentage",
-        "setPercentage",
-        "turnOn",
-        "turnOff"
-      ],
-      "additionalApplianceDetails": {},
-      "applianceId": "uniqueLightDeviceId",
-      "friendlyDescription": "descriptionThatIsShownToCustomer",
-      "friendlyName": "Living Room",
-      "isReachable": true,
-      "manufacturerName": "yourManufacturerName",
-      "modelName": "fancyLight",
-      "version": "your software version number here."
-    }]
-  };
+alehos.registerHandler('discovery', (req, cb) => {
+  // get the payload
   cb(null, payload);
-};
+});
 
-app.onoff = function(req, cb) {
+alehos.registerHandler('onoff', (req, cb) => {
   // check if the request is on/off by looking at req.event.header.name
   // action
   // finally return OK
   cb(null);
 };
 
-exports.handler = app.handler;
+exports.handler = function(event, context, cb) {
+  alehos.handle(event, context, cb);
+}
 ```
 
 ## supported functions
@@ -80,12 +50,10 @@ If you don't provide equivalent function, the response will be UnsupportedOperat
 If you want to return error, generate an new error object, with code of the intented error.
 Example:
 ```
-app.onoff = function(req, cb) {
-  // if the device is un reachable
-  var err = new Error();
-  err.code = app.code.ERROR_TARGET_OFFLINE;
-  cb(err);
-};
+// if the device is un reachable
+var err = new Error();
+err.code = this.code.ERROR_TARGET_OFFLINE;
+return cb(err);
 ```
 
 # Coding style
