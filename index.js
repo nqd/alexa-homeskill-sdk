@@ -5,7 +5,6 @@ let proc = require('./lib/proc');
 
 let Alehos = function() {
   this.code = code;
-  this.getHlrFn = proc.getHlrFn;
   this.genRes = proc.genRes;
   this.handlers = {};
 };
@@ -24,14 +23,45 @@ Alehos.prototype.registerHandler = function(eventName, handler) {
   this.handlers[eventName] = handler;
 };
 
-Alehos.prototype.handler = function(event, context, cb) {
+Alehos.prototype._getHlrFn = function(type) {
+  let fn;
+  switch (type) {
+    case this.code.REQUEST_HEALTHCHECK:
+    fn = this.handlers['healthCheck'];
+    break;
+
+    case this.code.REQUEST_DISCOVER:
+    fn = this.handlers['discover'];
+    break;
+
+    case this.code.REQUEST_TURN_ON:
+    case this.code.REQUEST_TURN_OFF:
+    fn = this.handlers['onoff'];
+    break;
+
+    case this.code.REQUEST_SET_TEMPERATURE:
+    case this.code.REQUEST_INC_TEMPERATURE:
+    case this.code.REQUEST_DEC_TEMPERATURE:
+    fn = this.handlers['temperature'];
+    break;
+
+    case this.code.REQUEST_SET_PERCENTAGE:
+    case this.code.REQUEST_INC_PERCENTAGE:
+    case this.code.REQUEST_DEC_PERCENTAGE:
+    fn = this.handlers['percentage'];
+    break;
+  }
+  return fn;
+};
+
+Alehos.prototype.handle = function(event, context, cb) {
   let type = event && event.header && event.header.name;
   let req = {
     event: event,
     context: context
   };
 
-  this._handFn = this.getHlrFn(type);
+  let _handFn = this._getHlrFn(type);
 
   let _handFnCb = (err, payload) => {
     let res = {
@@ -42,13 +72,13 @@ Alehos.prototype.handler = function(event, context, cb) {
   };
 
   // without supported function
-  if (this._handFn === undefined) {
+  if (_handFn === undefined) {
     let err = new Error();
     err.code = this.code.ERROR_UNSUPPORTED_OPERATION;
     return _handFnCb(err);
   }
   // else, call the handler function
-  this._handFn(req, _handFnCb);
+  _handFn(req, _handFnCb);
 };
 
 module.exports = Alehos;
