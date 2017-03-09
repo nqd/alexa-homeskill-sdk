@@ -10,7 +10,9 @@ let Alehos = function() {
 };
 
 /**
- * register a handling function
+ * register a handling function with an event
+ * the event should be: discover, onoff, temperature, percentage, healthCheck
+ * the object will be wrote to handlers
  *
  * @param {string} name
  * @param {function} fnc
@@ -23,6 +25,12 @@ Alehos.prototype.registerHandler = function(eventName, handler) {
   this.handlers[eventName] = handler;
 };
 
+/**
+ * Given type of the request, provide handling function
+ *
+ * @param {string} type
+ * @returns {function}
+ */
 Alehos.prototype._getHlrFn = function(type) {
   let fn;
   switch (type) {
@@ -61,9 +69,9 @@ Alehos.prototype.handle = function(event, context, cb) {
     context: context
   };
 
-  let _handFn = this._getHlrFn(type);
+  let handFn = this._getHlrFn(type);
 
-  let _handFnCb = (err, payload) => {
+  let handFnCb = (err, payload) => {
     let res = {
       err: err,
       payload: payload
@@ -72,13 +80,13 @@ Alehos.prototype.handle = function(event, context, cb) {
   };
 
   // without supported function
-  if (_handFn === undefined) {
+  if (handFn === undefined) {
     let err = new Error();
     err.code = this.code.ERROR_UNSUPPORTED_OPERATION;
-    return _handFnCb(err);
+    return handFnCb(err);
   }
   // else, call the handler function
-  _handFn(req, _handFnCb);
+  handFn(req, handFnCb);
 };
 
 module.exports = Alehos;

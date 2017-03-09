@@ -108,3 +108,57 @@ describe('registerHandler', () => {
     done();
   });
 });
+
+describe('getHlrFn', () => {
+  beforeEach(() => {
+    app = new Alehos();
+    // provide some functions
+    app.handlers = {
+      discover: function discoverHlr(_req, _cb) {},
+      onoff: function onoffHlr(_req, _cb) {},
+      temperature: function temperatureHlr(_req, _cb) {},
+      percentage: function percentageHlr(_req, _cb) {},
+      healthCheck: function healthCheckHlr(_req, _cb) {},
+    };
+  });
+  it('should call discovery fnc from discovery event', () => {
+    const event = events.reqDiscovery;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.discover);
+  });
+  it('should call on/off fnc from turnOn event', () => {
+    const event = events.reqTurnOn;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.onoff);
+  });
+  it('should call on/off fnc from turnOff event', () => {
+    const event = events.reqTurnOff;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.onoff);
+  });
+  it('should call temperature fnc from set target temperature event', () => {
+    const event = events.reqSetTargetTemperature;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.temperature);
+  });
+  it('should call temperature fnc from inc target temperature event', () => {
+    const event = events.reqIncTargetTemperature;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.temperature);
+  });
+  it('should call temperature fnc from dec target temperature event', () => {
+    const event = events.reqDecTargetTemperature;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.temperature);
+  });
+  it('should call percentage fnc from set percentage event', () => {
+    const event = events.reqSetPercentage;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.percentage);
+  });
+  it('should call percentage fnc from inc percentage event', () => {
+    const event = events.reqIncPercentage;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.percentage);
+  });
+  it('should call percentage fnc from dec percentage event', () => {
+    const event = events.reqDecPercentage;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.percentage);
+  });
+  it('should call health check fnc from health check event', () => {
+    const event = events.reqHealthCheck;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.healthCheck);
+  });
+});
