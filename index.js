@@ -7,6 +7,21 @@ let Alehos = function() {
   this.code = code;
   this.getHlrFn = proc.getHlrFn;
   this.genRes = proc.genRes;
+  this.handlers = {};
+};
+
+/**
+ * register a handling function
+ *
+ * @param {string} name
+ * @param {function} fnc
+ */
+Alehos.prototype.registerHandler = function(eventName, handler) {
+  if (typeof handler !== 'function') {
+    throw new Error(`Event handler for '${eventName}' was not a function`);
+  }
+
+  this.handlers[eventName] = handler;
 };
 
 Alehos.prototype.handler = function(event, context, cb) {

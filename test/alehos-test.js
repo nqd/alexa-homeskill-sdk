@@ -88,3 +88,23 @@ describe('Alehos', () => {
     );
   });
 });
+
+let expect = require('chai').expect;
+
+describe('registerHandler', () => {
+  beforeEach(() => {
+    app = new Alehos();
+  });
+  it('should refuse to register handler with non function', done => {
+    expect(() => {
+      app.registerHandler('key', 'not a function');
+    }).to.throw(Error);
+    done();
+  });
+  it('should register a function to its handlers list', done => {
+    let hdlr = function() {};
+    app.registerHandler('key', hdlr);
+    expect(app.handlers['key']).to.deep.eq(hdlr);
+    done();
+  });
+});
