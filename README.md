@@ -52,7 +52,7 @@ Example:
 ```
 // if the device is un reachable
 var err = new Error();
-err.code = this.code.ERROR_TARGET_OFFLINE;
+err.code = alehos.code.ERROR_TARGET_OFFLINE;
 return cb(err);
 ```
 

@@ -5,7 +5,6 @@ let proc = require('./lib/proc');
 
 let Alehos = function() {
   this.code = code;
-  this.genRes = proc.genRes;
   this.handlers = {};
 };
 
@@ -62,6 +61,14 @@ Alehos.prototype._getHlrFn = function(type) {
   return fn;
 };
 
+/**
+ * Main function to handle request, and give out response
+ *
+ * @param {object} event
+ * @param {object} context
+ * @param {function} cb
+ * @returns no
+ */
 Alehos.prototype.handle = function(event, context, cb) {
   let type = event && event.header && event.header.name;
   let req = {
@@ -76,7 +83,7 @@ Alehos.prototype.handle = function(event, context, cb) {
       err: err,
       payload: payload
     };
-    return cb(null, this.genRes(req, res));
+    return cb(null, proc.genRes(req, res));
   };
 
   // without supported function
