@@ -57,6 +57,11 @@ Alehos.prototype._getHlrFn = function(type) {
     case this.code.REQUEST_DEC_PERCENTAGE:
     fn = this.handlers['percentage'];
     break;
+
+    case this.code.REQUEST_GET_LOCK_STATE:
+    case this.code.REQUEST_SET_LOCK_STATE:
+    fn = this.handlers['lock'];
+    break;
   }
   return fn;
 };

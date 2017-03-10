@@ -119,6 +119,7 @@ describe('getHlrFn', () => {
       temperature: function temperatureHlr(_req, _cb) {},
       percentage: function percentageHlr(_req, _cb) {},
       healthCheck: function healthCheckHlr(_req, _cb) {},
+      lock: function lockHlr(_req, _cb) {},
     };
   });
   it('should call discovery fnc from discovery event', () => {
@@ -160,5 +161,13 @@ describe('getHlrFn', () => {
   it('should call health check fnc from health check event', () => {
     const event = events.reqHealthCheck;
     expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.healthCheck);
+  });
+  it('should call lock fnc for get lock state event', () => {
+    const event = events.reqGetLockState;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.lock);
+  });
+  it('should call lock fnc for set lock state event', () => {
+    const event = events.reqSetLockState;
+    expect(app._getHlrFn(event.header.name)).to.eq(app.handlers.lock);
   });
 });

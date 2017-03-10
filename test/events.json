@@ -29,7 +29,7 @@
       "payloadVersion": "2"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {},
         "applianceId": "[Device ID for Ceiling Fan]"
@@ -44,7 +44,7 @@
       "payloadVersion": "2"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {},
         "applianceId": "[Device ID for Ceiling Fan]"
@@ -59,7 +59,7 @@
       "payloadVersion": "2"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {
           "extraDetail1": "optionalDetailForSkillAdapterToReferenceThisDevice",
@@ -85,7 +85,7 @@
       " deltaTemperature": {
         "value": 3.6
       },
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {
           "extraDetail1": "optionalDetailForSkillAdapterToReferenceThisDevice",
@@ -105,7 +105,7 @@
       "messageId": "23624201-23a5-44c3-8fdc-ec6c4b6c3df8"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "applianceId": "[Device ID for Bedroom Thermostat]",
         "additionalApplianceDetails": {
@@ -128,7 +128,7 @@
       "payloadVersion": "2"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {},
         "applianceId": "[Device ID for Cinema Room Light]"
@@ -146,7 +146,7 @@
       "payloadVersion": "2"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {},
         "applianceId": "[Device ID for Cinema Room Light]"
@@ -164,7 +164,7 @@
       "payloadVersion": "2"
     },
     "payload": {
-      "accessToken": "[OAuth Token here]",
+      "accessToken": "oauth token here",
       "appliance": {
         "additionalApplianceDetails": {},
         "applianceId": "[Device ID for Cinema Room Light]"
@@ -172,6 +172,47 @@
       "deltaPercentage": {
         "value": 20.0
       }
+    }
+  },
+  "reqGetLockState": {
+    "header": {
+      "messageId": "01ebf625-0b89-4c4d-b3aa-32340e894688",
+      "name": "GetLockStateRequest",
+      "namespace": "Alexa.ConnectedHome.Query",
+      "payloadVersion": "2"
+    },
+    "payload": {
+      "accessToken": "oauth token here",
+      "appliance": {
+        "applianceId": "[Device ID for front door lock appliance]",
+        "additionalApplianceDetails": {
+          "extraDetail1": "optionalDetailForSkillAdapterToReferenceThisDevice",
+          "extraDetail2": "There can be multiple entries",
+          "extraDetail3": "but they should only be used for reference purposes.",
+          "extraDetail4": "This is not a suitable place to maintain current device state"
+        }
+      }
+    }
+  },
+  "reqSetLockState": {
+    "header": {
+      "messageId": "01ebf625-0b89-4c4d-b3aa-32340e894688",
+      "name": "SetLockStateRequest",
+      "namespace": "Alexa.ConnectedHome.Control",
+      "payloadVersion": "2"
+    },
+    "payload": {
+      "accessToken": "oauth token here",
+      "appliance": {
+        "applianceId": "[Device ID for front door lock appliance]",
+        "additionalApplianceDetails": {
+          "extraDetail1": "optionalDetailForSkillAdapterToReferenceThisDevice",
+          "extraDetail2": "There can be multiple entries",
+          "extraDetail3": "but they should only be used for reference purposes.",
+          "extraDetail4": "This is not a suitable place to maintain current device state"
+        }
+      },
+      "lockState": "LOCKED"
     }
   }
 }
